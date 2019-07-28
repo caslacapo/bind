@@ -13,19 +13,20 @@ echo '//
 //
 // See /usr/share/doc/bind*/sample/ for example named configuration files.
 //
-/// See the BIND Administrators Reference Manual (ARM) for details about the
+// See the BIND Administrators Reference Manual (ARM) for details about the
 // configuration located in /usr/share/doc/bind-{version}/Bv9ARM.html
 
 options {
+	// listen-on port 53 { 127.0.0.1; };
 	listen-on port 53 { 127.0.0.1; 10.0.0.100; };
-	// listen-on-v6 port 53 { ::1; };
+	listen-on-v6 port 53 { ::1; };
 	directory 	"/var/named";
 	dump-file 	"/var/named/data/cache_dump.db";
 	statistics-file "/var/named/data/named_stats.txt";
 	memstatistics-file "/var/named/data/named_mem_stats.txt";
-	//allow-query 
+	// allow-query     { localhost; };
 	allow-query     { localhost; 10.0.0.0/24; };
-	forwarders { 10.13.2.5; 10.13.2.7; };
+	forwarders	{ 10.13.2.5; 10.13.2.7; };
 
 	/* 
 	 - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.
@@ -39,8 +40,8 @@ options {
 	*/
 	recursion yes;
 
-	dnssec-enable yes;
-	dnssec-validation yes;
+	dnssec-enable no;
+	dnssec-validation no;
 
 	/* Path to ISC DLV key */
 	bindkeys-file "/etc/named.iscdlv.key";
@@ -69,9 +70,9 @@ zone "contoso.com" IN {
 	allow-update { none; };
 };
 
-zone "10.in-addr.arpa.zone" IN {
+zone "0.0.10.in-addr.arpa" IN {
 	type master;
-	file "10.in-addr.arpa.zone";
+	file "0.0.10.in-addr.arpa.zone";
 	allow-update { none; };
 };
 
